@@ -1,0 +1,83 @@
+//===Hides field 'phone_number', 'field_one', changes the field names to
+//===fields to hide make sure field attrib box in app desing is checked "Hidden".
+//===This instance I have removed 'Data_Manager' for testing. 
+//===Made myself Data_Manager to test. 
+
+ON('load-record', function(event) {
+  var adminRoles = ['Owner', 'Manager',];
+
+  // if the current role is one of the designated admin roles...
+  if (ISROLE(adminRoles)) {
+    // make the fields visible
+    SETHIDDEN('phone_number', false);
+    SETHIDDEN('field_one', false);
+  }
+});
+
+//==============================================================
+function getElevation() {
+  var usgsURL = 'https://nationalmap.gov/epqs/pqs.php?x=' + LONGITUDE() + '&y=' + LATITUDE() + '&units=Feet&output=json';
+
+  // use cors/https proxy for web requests
+  if (!ISMOBILE()) {
+    usgsURL = 'https://cors-light.herokuapp.com/' + usgsURL;
+  }
+
+  var options = {
+    url: usgsURL
+  };
+
+  REQUEST(options, function(error, response, body) {
+    if (error) {
+      ALERT('Error with request: ' + INSPECT(error));
+    } else {
+      elevation = JSON.parse(body);
+      SETVALUE('usgs_elevation', elevation.USGS_Elevation_Point_Query_Service.Elevation_Query.Elevation);
+    }
+  });
+}
+//===================================================================
+ON('change-geometry', getElevation);
+function getWeather() {
+  var apiKey = '3b64b100d39655a4';
+
+  var options = {
+    url: 'https://api.wunderground.com/api/' + apiKey + '/conditions/q/' + LATITUDE() + ',' + LONGITUDE() + '.json'
+  };
+
+  REQUEST(options, function(error, response, body) {
+    if (error) {
+      ALERT('Error with request: ' + error);
+    } else {
+      var data = JSON.parse(body).current_observation;
+      SETVALUE('weather_summary', data.weather + ', ' + data.wind_string);
+    }
+  });
+}
+//=========================================================================
+ON('change-geometry', getWeather);
+
+  // Adds Button that will send SMS to Phone number entered in phone number field
+
+ON('click', 'send_sms', function(event) {
+  if (!EXISTS($phone_number)) {
+    ALERT('You must enter a phone number.');
+    return;
+  }
+
+  if (!ISMOBILE()) {
+    ALERT('Only mobile devices support making phone calls.');
+    return;
+  }
+
+  // iOS uses the '&' character to separate the number from the sms text
+  // Note that not all SMS apps on Android support passing the body text.
+  if (PLATFORM() === 'iOS') {
+    OPENURL(FORMAT('sms:%s&body=%s',
+      $phone_number, encodeURIComponent($sms)));
+  } else {
+    OPENURL(FORMAT('sms:%s?body=%s',
+      $phone_number, encodeURIComponent($sms)));
+  }
+});
+//=====================================================================
