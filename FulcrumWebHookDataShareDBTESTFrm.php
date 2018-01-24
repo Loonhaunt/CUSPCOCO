@@ -11,11 +11,11 @@
 $formID = '3ffce3bc-7804-4fb5-83c4-60e4e8b23a64';
 $shareToken = 'bab0ca54f7bc1d13.csv';
 # MySQL database connection info
-$host = 'localhost:3306';
-$dbname = 'your-database';
-$user = 'your-user';
-$password = 'your-pass';
-$table = 'your-table';
+$host = '66.112.23.251:444';
+$dbname = 'fulcrum_test';
+$user = 'dave';
+$password = 'LuCydoG54!';
+$table = 'api_test_table';
 $db = new PDO('mysql:host=' . $host . ';dbname=' . $dbname, $user, $password);
 # Webhook JSON payload
 //$input = file_get_contents('mysql_webhook_payload.json'); # Local file for debugging
