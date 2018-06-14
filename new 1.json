@@ -1,0 +1,353 @@
+/ 20180614131641
+// https://api.fulcrumapp.com/api/v2/forms/6eb3bbd7-02e1-42d1-8578-85448cdbd0f3.json?token=c822d285323318f4bc9aa8ec35c6cc6845158adf661e43ca5c8cb6e031a551a02df8d3cbef515f40
+
+{
+  "form": {
+    "name": "Time Off Request Form Vers 0.6.14.2018",
+    "description": "",
+    "version": 19,
+    "bounding_box": [
+      38.9902671659728,
+      -105.051807398074,
+      38.9902671659728,
+      -105.051807398074
+    ],
+    "record_title_key": "8bf8",
+    "title_field_keys": [
+      "8bf8",
+      "0990",
+      "1b76",
+      "3673",
+      "1360"
+    ],
+    "status_field": {
+      "type": "StatusField",
+      "label": "Status",
+      "key": "@status",
+      "data_name": "status",
+      "default_value": "",
+      "enabled": false,
+      "read_only": false,
+      "hidden": false,
+      "description": "",
+      "choices": [
+        
+      ],
+      "required": false,
+      "disabled": false,
+      "default_previous_value": false
+    },
+    "auto_assign": true,
+    "hidden_on_dashboard": false,
+    "record_count": 1,
+    "geometry_types": [
+      "Point"
+    ],
+    "geometry_required": false,
+    "script": "//==Make sure that fields are set to \"Read-Only\"\n\nON('load-record', function(event) {\n  var adminRoles = ['Owner', 'Manager', 'OperationsManager'];\n\n  // enable the fields if the current role is one of the designated admin roles...\n  if (ISROLE(adminRoles)) {\n    // make some fields editable by turning off the read-only flag\n    SETREADONLY('$manager_name', false);\n    SETREADONLY('$manager_comment', false);\n    SETREADONLY('$approve_disapprove',false);\n    SETREADONLY('$manager_signature',false);\n    SETREADONLY('$approve_disapprove_date',false);\n    SETREADONLY('@status', false); // @status is the special data name for the status field\n  }\n});",
+    "projects_enabled": false,
+    "assignment_enabled": true,
+    "id": "6eb3bbd7-02e1-42d1-8578-85448cdbd0f3",
+    "created_at": "2018-06-14T16:00:08Z",
+    "updated_at": "2018-06-14T17:25:24Z",
+    "image": "https://fulcrumapp.s3.amazonaws.com/form-images/6eb3bbd7-02e1-42d1-8578-85448cdbd0f3-12edbd41-7f70-495f-90fc-9a2b057e738a.png",
+    "image_thumbnail": "https://fulcrumapp.s3.amazonaws.com/form-images/thumb_6eb3bbd7-02e1-42d1-8578-85448cdbd0f3-12edbd41-7f70-495f-90fc-9a2b057e738a.png",
+    "image_small": "https://fulcrumapp.s3.amazonaws.com/form-images/small_6eb3bbd7-02e1-42d1-8578-85448cdbd0f3-12edbd41-7f70-495f-90fc-9a2b057e738a.png",
+    "image_large": "https://fulcrumapp.s3.amazonaws.com/form-images/large_6eb3bbd7-02e1-42d1-8578-85448cdbd0f3-12edbd41-7f70-495f-90fc-9a2b057e738a.png",
+    "elements": [
+      {
+        "type": "Section",
+        "key": "a980",
+        "label": "Employee Section",
+        "description": null,
+        "required": false,
+        "disabled": false,
+        "hidden": false,
+        "data_name": "employee_section",
+        "default_value": null,
+        "visible_conditions_type": null,
+        "visible_conditions_behavior": "clear",
+        "visible_conditions": null,
+        "required_conditions_type": null,
+        "required_conditions": null,
+        "display": "inline",
+        "elements": [
+          {
+            "type": "CalculatedField",
+            "key": "0990",
+            "label": "Date Stamp",
+            "description": null,
+            "required": false,
+            "disabled": false,
+            "hidden": true,
+            "data_name": "date_stamp",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": [
+              
+            ],
+            "expression": "//===Set Permenant Date for this record\n//===2018 4 27\nSETRESULT(ONCE(new Date()));\n",
+            "display": {
+              "style": "date",
+              "currency": null
+            },
+            "default_previous_value": false
+          },
+          {
+            "type": "ChoiceField",
+            "key": "8bf8",
+            "label": "Requester",
+            "description": null,
+            "required": false,
+            "disabled": false,
+            "hidden": false,
+            "data_name": "requester",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null,
+            "multiple": false,
+            "allow_other": false,
+            "choice_list_id": "984aab06-8762-4bc4-8d61-b9154894bd01",
+            "default_previous_value": false
+          },
+          {
+            "type": "ChoiceField",
+            "key": "1b76",
+            "label": "Reason For Time Off",
+            "description": null,
+            "required": false,
+            "disabled": false,
+            "hidden": false,
+            "data_name": "reason_for_time_off",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null,
+            "multiple": false,
+            "allow_other": true,
+            "choices": [
+              {
+                "label": "Vacation",
+                "value": "Vacation"
+              },
+              {
+                "label": "Sick Leave",
+                "value": "Sick Leave"
+              },
+              {
+                "label": "Jury Duty",
+                "value": "Jury Duty"
+              }
+            ],
+            "default_previous_value": false
+          },
+          {
+            "type": "DateTimeField",
+            "key": "3673",
+            "label": "Starting Date Requested",
+            "description": null,
+            "required": true,
+            "disabled": false,
+            "hidden": false,
+            "data_name": "starting_date_requested",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null,
+            "default_previous_value": false
+          },
+          {
+            "type": "DateTimeField",
+            "key": "c99d",
+            "label": "Ending Date Request",
+            "description": null,
+            "required": true,
+            "disabled": false,
+            "hidden": false,
+            "data_name": "ending_date_request",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null,
+            "default_previous_value": false
+          },
+          {
+            "type": "TextField",
+            "key": "404b",
+            "label": "Notes or Comment:",
+            "description": null,
+            "required": false,
+            "disabled": false,
+            "hidden": false,
+            "data_name": "notes_or_comment",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null,
+            "numeric": false,
+            "pattern": null,
+            "pattern_description": null,
+            "min_length": null,
+            "max_length": null,
+            "default_previous_value": false
+          }
+        ]
+      },
+      {
+        "type": "Section",
+        "key": "0e65",
+        "label": "Manager Section",
+        "description": null,
+        "required": false,
+        "disabled": false,
+        "hidden": false,
+        "data_name": "manager_section",
+        "default_value": null,
+        "visible_conditions_type": null,
+        "visible_conditions_behavior": "clear",
+        "visible_conditions": null,
+        "required_conditions_type": null,
+        "required_conditions": null,
+        "display": "inline",
+        "elements": [
+          {
+            "type": "ChoiceField",
+            "key": "5741",
+            "label": "Manager Name",
+            "description": null,
+            "required": false,
+            "disabled": true,
+            "hidden": false,
+            "data_name": "manager_name",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null,
+            "multiple": false,
+            "allow_other": false,
+            "choice_list_id": "984aab06-8762-4bc4-8d61-b9154894bd01",
+            "default_previous_value": false
+          },
+          {
+            "type": "TextField",
+            "key": "e881",
+            "label": "Manager Comment",
+            "description": null,
+            "required": false,
+            "disabled": true,
+            "hidden": false,
+            "data_name": "manager_comment",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null,
+            "numeric": false,
+            "pattern": null,
+            "pattern_description": null,
+            "min_length": null,
+            "max_length": null,
+            "default_previous_value": false
+          },
+          {
+            "type": "YesNoField",
+            "key": "1360",
+            "label": "Approve Disapprove",
+            "description": null,
+            "required": false,
+            "disabled": true,
+            "hidden": false,
+            "data_name": "approve_disapprove",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null,
+            "positive": {
+              "label": "Yes",
+              "value": "yes"
+            },
+            "negative": {
+              "label": "No",
+              "value": "no"
+            },
+            "neutral": {
+              "label": "N/A",
+              "value": "n/a"
+            },
+            "neutral_enabled": false,
+            "default_previous_value": false
+          },
+          {
+            "type": "Label",
+            "key": "b810",
+            "label": "Approval Note Valid Until Signed By Authorized Manager",
+            "description": null,
+            "required": false,
+            "disabled": false,
+            "hidden": false,
+            "data_name": "approval_note_valid_until_signed_by_authorized_manager",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null
+          },
+          {
+            "type": "SignatureField",
+            "key": "9be1",
+            "label": "Manager Signature",
+            "description": null,
+            "required": false,
+            "disabled": false,
+            "hidden": false,
+            "data_name": "manager_signature",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null,
+            "agreement_text": ""
+          },
+          {
+            "type": "DateTimeField",
+            "key": "b59a",
+            "label": "Approve Disapprove Date",
+            "description": null,
+            "required": false,
+            "disabled": true,
+            "hidden": false,
+            "data_name": "approve_disapprove_date",
+            "default_value": null,
+            "visible_conditions_type": null,
+            "visible_conditions_behavior": "clear",
+            "visible_conditions": null,
+            "required_conditions_type": null,
+            "required_conditions": null,
+            "default_previous_value": false
+          }
+        ]
+      }
+    ]
+  }
+}
