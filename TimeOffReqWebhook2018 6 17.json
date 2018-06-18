@@ -1,0 +1,62 @@
+//==> Fulcrum Time Off Request Webhook.   6 17 2018
+//==> Dave Brown
+function doPost(e){
+  return handleResponse(e);
+}
+
+function handleResponse(e) {
+  // Parse JSON webhook payload
+  var jsonString = e.postData.getDataAsString();
+  var payload = JSON.parse(jsonString);
+  
+  // Get/set variables for email body
+  var formId = "6eb3bbd7-02e1-42d1-8578-85448cdbd0f3";
+  var sendTo = "dave@cusp.ws";
+  //var title = payload.data.form_values["8bf8"]; // https://api.fulcrumapp.com/api/v2/forms/YOUR-FORM-ID.json?token=YOUR-TOKEN
+  var title = payload.data.form_values["8bf8"].choice_values.join() + ", " + payload.data.form_values["1b76"].choice_values.join() + ", " + payload.data.form_values["3673"] + ", " + payload.data.form_values["c99d"];
+  var record_id = payload.data.id;
+  var user = payload.data.updated_by;
+  var lat = payload.data.latitude;
+  var lng = payload.data.longitude;
+  var mapURL = "http://maps.googleapis.com/maps/api/staticmap?center="+lat+","+lng+"&zoom=15&size=300x300&maptype=hybrid&markers=color:red%7C"+lat+","+lng+"";
+  var updated_at = isoToDate(payload.data.updated_at);
+  var subject = "";
+
+  // Make sure it's the form we want
+  if (payload.data.form_id === formId) {
+    // What type of event is it?
+    if (payload.type === "record.create") {
+      subject = "A New Vacation Request Has Been Created";
+    } else if (payload.type === "record.update") {
+      subject = "A Vacation Request Was Updated";
+    } else if (payload.type === "record.delete") {
+      subject = "A Vacation Request Was Deleted";
+    }
+    // Send email notification
+    sendMail();
+  }
+
+  function sendMail() {
+    // Build email body
+    var body = "<p>" +
+                  "<b>User: </b>" + user + "<br>" +
+                  "<b>Record Title: </b>" + title + "<br>" +
+                  "<b>Record ID: </b><a href=\"https://web.fulcrumapp.com/records/" + record_id + "\">" + record_id + "</a><br>" +
+                  "<b>Timestamp: </b>" + updated_at + "<br>" +
+                  "<p><a href='https://web.fulcrumapp.com/records/" + record_id + "' title='Open in Fulcrum'><img src='" + mapURL + "'></a></p>" +
+                "</p>";
+    
+    // Send email
+    MailApp.sendEmail({
+      to: sendTo,
+      subject: subject,
+      htmlBody: body
+    });
+  }
+}
+
+// Apps Script can't seem to handle ISO 8601 dates- http://stackoverflow.com/questions/11810441/how-do-i-format-this-date-string-so-that-google-scripts-recognizes-it
+function isoToDate(dateStr) { // argument = date string iso format
+  var str = dateStr.replace(/-/, '/').replace(/-/, '/').replace(/T/, ' ').replace(/\+/, ' \+').replace(/Z/, ' +00');
+  return new Date(str);
+}
